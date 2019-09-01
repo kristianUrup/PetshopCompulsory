@@ -7,7 +7,7 @@ namespace PetshopCompulsory.Core.DomainService
 {
     public interface IPetRepository
     {
-        List<Pet> GetPets();
+        List<Pet> ReadPets();
 
         Pet Create(Pet pet);
 

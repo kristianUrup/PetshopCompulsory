@@ -1,4 +1,5 @@
 ﻿using Core.Entity;
+using Infrastructure.Data;
 using PetshopCompulsory.Core.DomainService;
 using System;
 using System.Collections.Generic;
@@ -8,13 +9,12 @@ namespace Petshop.Infrastructure.Data
 {
     public class PetRepository : IPetRepository
     {
-        static int id = 1;
-        List<Pet> _pets = new List<Pet>();
 
         public Pet Create(Pet pet)
         {
-            pet.Id = id++;
-            _pets.Add(pet);
+            
+            pet.Id = FakeDB.id++;
+            FakeDB._pets.Add(pet);
             return pet;
         }
 
@@ -23,14 +23,14 @@ namespace Petshop.Infrastructure.Data
             Pet petFound = ReadById(id);
             if(petFound != null)
             {
-                _pets.Remove(petFound);
+                FakeDB._pets.Remove(petFound);
             }
-            return null;
+            return petFound;
         }
 
         public Pet ReadById(int id)
         {
-            foreach (Pet pet in _pets)
+            foreach (Pet pet in FakeDB._pets)
             {
                 if(pet.Id == id)
                 {
@@ -52,9 +52,9 @@ namespace Petshop.Infrastructure.Data
             throw new NotImplementedException();
         }
 
-        public List<Pet> GetPets()
+        public List<Pet> ReadPets()
         {
-            return _pets;
+            return FakeDB._pets;
         }
     }
 }

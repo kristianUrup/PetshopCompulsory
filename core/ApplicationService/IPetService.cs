@@ -10,9 +10,10 @@ namespace PetshopCompulsory.Core.ApplicationService
         List<Pet> GetPets();
 
         Pet GetPet(int id);
+        Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, string previousOwner, double price);
 
         Pet Create(Pet pet);
-        Pet Update(Pet pet);
-        Pet Delete(Pet pet);
+        Pet Update(Pet petUpdate);
+        Pet Delete(int id);
     }
 }

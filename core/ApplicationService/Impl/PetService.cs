@@ -9,23 +9,36 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
     public class PetService : IPetService
     {
         IPetRepository _petRepo;
-        List<Pet> _pets;
 
         public PetService(IPetRepository petRepo)
         {
             _petRepo = petRepo;
-            _pets = petRepo.GetPets();
+        }
+
+        public Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, string previousOwner, double price)
+        {
+            var pet = new Pet()
+            {
+                Name = name,
+                Type = type,
+                Birthdate = birthDate,
+                SoldDate = soldDate,
+                Color = color,
+                PreviousOwner = previousOwner,
+                Price = price
+            };
+            return pet;
         }
 
         public Pet Create(Pet pet)
         {
-            throw new NotImplementedException();
+            return _petRepo.Create(pet);
         }
 
 
         public Pet GetPet(int id)
         {
-            foreach (Pet pet in _pets)
+            foreach (Pet pet in _petRepo.ReadPets())
             {
                 if(pet.Id == id)
                 {
@@ -35,26 +48,25 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             return null;
         }
 
-        public Pet Update(Pet pet)
+        public Pet Update(Pet petUpdate)
         {
-            throw new NotImplementedException();
+            var pet = GetPet(petUpdate.Id);
+            pet.Name = petUpdate.Name;
+            pet.Price = petUpdate.Price;
+            pet.PreviousOwner = petUpdate.PreviousOwner;
+            return pet;
         }
 
         public List<Pet> GetPets()
         {
-            return _pets;
+            return _petRepo.ReadPets();
         }
 
-        public void Delete(Pet pet)
+        public Pet Delete(int id)
         {
-            foreach (Pet _pet in _pets)
-            {
-                if(_pet.Id == pet.Id)
-                {
-                    _pets.Remove(pet);
-                }
-            }
+           return _petRepo.Delete(id);
         }
 
+        
     }
 }
