@@ -81,5 +81,19 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             IEnumerable<Pet> pets = _petRepo.ReadPets().OrderBy(pet => pet.Price);
             return pets.ToList();
         }
+
+        public List<Pet> SearchForType(string type)
+        {
+            string theType = type.ToLower();
+            List<Pet> searchedPets = new List<Pet>();
+            foreach (var pet in _petRepo.ReadPets().ToList())
+            {
+                if (pet.Type.ToLower().Equals(theType))
+                {
+                    searchedPets.Add(pet);
+                }
+            }
+            return searchedPets;
+        }
     }
 }

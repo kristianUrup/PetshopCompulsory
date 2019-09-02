@@ -7,18 +7,18 @@ using System.Text;
 
 namespace PetshopCompulsory.ConsoleApp
 {
-    public class Printer
+    public class Printer: IPrinter
     {
-        
+
         IPetService petService;
-        
+
         public Printer(IPetService petSer)
         {
             petService = petSer;
             Choices();
         }
 
-        private void Choices()
+        public void Choices()
         {
             string[] menuItems =
             {
@@ -27,6 +27,8 @@ namespace PetshopCompulsory.ConsoleApp
                 "Delete Pet",
                 "Edit Pet",
                 "Find the 5 cheapest pets",
+                "Sorted list in ascending order by the price",
+                "Search pets by type",
                 "Exit"
             };
 
@@ -42,11 +44,11 @@ namespace PetshopCompulsory.ConsoleApp
                 Choices();
             }
             HandleChoice(selection);
-            
-            
+
+
         }
 
-        private void PrintPets()
+        public void PrintPets()
         {
             foreach (Pet pet in petService.GetPets())
             {
@@ -54,7 +56,7 @@ namespace PetshopCompulsory.ConsoleApp
             }
         }
 
-        private void HandleChoice(int selection)
+        public void HandleChoice(int selection)
         {
             switch (selection)
             {
@@ -71,16 +73,46 @@ namespace PetshopCompulsory.ConsoleApp
                     EditPet();
                     break;
                 case 5:
-                    //chepest pets
+                    FiveCheapestPets();
                     break;
                 case 6:
+                    SortedByPrice();
+                    break;
+                case 7:
+                    SearchType();
+                    break;
+                case 8:
                     Exit();
                     break;
             }
 
         }
 
-        private void FiveCheapestPets()
+        public void SearchType()
+        {
+            Console.Clear();
+            string type = WriteAndRead("Insert which type of pet you want to find: ");
+            List<Pet> searchedPets = petService.SearchForType(type);
+            foreach (var pet in searchedPets)
+            {
+                Console.WriteLine("Name: {0}, Type: {1}, Price: {2}", pet.Name, pet.Type, pet.Price);
+            }
+            Choices();
+        }
+
+        public void SortedByPrice()
+        {
+            Console.Clear();
+            WriteLine("This is ascending by the price of the pet: ");
+            foreach (var pet in petService.OrderByPrice())
+            {
+                Console.WriteLine("Name: {0}, Price: {1}, Type: {2}", pet.Name, pet.Price, pet.Type);
+            }
+            WriteLine("");
+            Choices();
+        }
+
+        public void FiveCheapestPets()
         {
             Console.Clear();
             WriteLine("This is the 5 cheapest pets:");
@@ -88,9 +120,10 @@ namespace PetshopCompulsory.ConsoleApp
             {
                 Console.WriteLine("Name: {0}, Price: {1}, Type: {2} ", pet.Name, pet.Price, pet.Type);
             }
-            
+            WriteLine("What to do next? ");
+            Choices();
         }
-        private void EditPet()
+        public void EditPet()
         {
             Console.Clear();
             PrintPets();
@@ -99,35 +132,47 @@ namespace PetshopCompulsory.ConsoleApp
             Console.WriteLine("You want to change {0} the {1} ", pet.Name, pet.Type);
             int answer = int.Parse(WriteAndRead("\n1:Yes\n2:No\n"));
 
-            if(answer == 1)
+            if (answer == 1)
             {
                 UpdatePet(pet);
             }
         }
 
-        private void UpdatePet(Pet pet)
+        public void UpdatePet(Pet pet)
         {
-            pet.Name = WriteAndRead("New name: ");
-            pet.Price = double.Parse(WriteAndRead("New price: "));
-            pet.PreviousOwner = WriteAndRead("New previous owner: ");
-            petService.Update(pet);
-            Console.Clear();
-            Choices();
+
+            int id = int.Parse(WriteAndRead("Type the id of the pet, which you wanna edit"));
+            Pet updatePet = petService.GetPet(id);
+            if (updatePet != null)
+            {
+                WriteLine("Type the new informations");
+                string name = WriteAndRead("\nName: ");
+                double price = double.Parse(WriteAndRead("\nPrice: "));
+                string previousOwner = WriteAndRead("\nPrevious owner: ");
+                Pet updatedPet = new Pet
+                {
+                    Name = name,
+                    Price = price,
+                    PreviousOwner = previousOwner
+
+                };
+                petService.Update(updatePet, updatedPet);
+            }
         }
-        private void Exit()
+        public void Exit()
         {
             System.Environment.Exit(1);
         }
 
-        private void DeletePet()
+        public void DeletePet()
         {
             Console.Clear();
             WriteLine("This is all the pets \n");
             PrintPets();
             int id = int.Parse(WriteAndRead("\n Type the id of the pet you want to delete: "));
             foreach (Pet pet in petService.GetPets())
-            {
-                if(pet.Id == id)
+                {
+                if (pet.Id == id)
                 {
                     Console.Clear();
                     Console.WriteLine("You have deleted {0}, which is a {1}", pet.Name, pet.Type);
@@ -141,12 +186,12 @@ namespace PetshopCompulsory.ConsoleApp
             }
         }
 
-        private void WriteLine(string input)
+        public void WriteLine(string input)
         {
             Console.WriteLine(input);
         }
 
-        private void CreatePet()
+        public void CreatePet()
         {
             Console.Clear();
             WriteLine("Now insert the values for the new pet underneath");
@@ -161,13 +206,13 @@ namespace PetshopCompulsory.ConsoleApp
             Console.Clear();
             string birthdateString = birthdate.ToString("yyyyMMdd");
             string soldDateString = soldDate.ToString("yyyyMMdd");
-            
+
             Console.WriteLine("\nName: {0},\nType: {1},\nBirthDate: {2},\nSoldDate: {3},\nColor: {4}," +
-                " \nPrevious owner: {5},\nPrice: {6}\n has been created",
-                name, type, birthdateString, soldDateString, color, previousOwner, price);
+            " \nPrevious owner: {5},\nPrice: {6}\n has been created",
+            name, type, birthdateString, soldDateString, color, previousOwner, price);
             int question = int.Parse(WriteAndRead("Do you want to save the pet?:\n1:Yes\n2:No"));
 
-            if(question == 1)
+            if (question == 1)
             {
                 Pet pet = petService.NewPet(name, type, birthdate, soldDate, color, previousOwner, price);
                 Console.WriteLine("\nName: {0},\nType: {1},\nBirthDate: {2},\nSoldDate: {3},\nColor: {4}," +
@@ -181,12 +226,12 @@ namespace PetshopCompulsory.ConsoleApp
             }
         }
 
-        private void SavePet(Pet pet)
+        public void SavePet(Pet pet)
         {
             petService.Create(pet);
         }
 
-        private string WriteAndRead(string input)
+        public string WriteAndRead(string input)
         {
             Console.Write(input);
             return Console.ReadLine();
