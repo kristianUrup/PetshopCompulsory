@@ -7,16 +7,16 @@ namespace PetshopCompulsory.Core.DomainService
 {
     public interface IPetRepository
     {
-        List<Pet> ReadPets();
+        IEnumerable<Pet> ReadPets();
 
         Pet Create(Pet pet);
 
         Pet ReadById(int id);
 
-        Pet Update(Pet pet);
+        Pet Update(Pet petToUpdate, Pet updatedPet);
 
         Pet Delete(int id);
 
-        List<Pet> SearchPets(string petSearch);
+        IEnumerable<Pet> SearchPets(string petSearch);
     }
 }

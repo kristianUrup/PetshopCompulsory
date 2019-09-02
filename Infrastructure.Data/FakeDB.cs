@@ -1,12 +1,13 @@
 ﻿using Core.Entity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Infrastructure.Data
 {
     public class FakeDB
     {
-        public static List<Pet> _pets;
+        public static IEnumerable<Pet> _pets;
         public static int id = 1;
         FakeDB()
         {
@@ -14,7 +15,6 @@ namespace Infrastructure.Data
         }
         public static void InitData()
         {
-            _pets = new List<Pet>();
             Pet pet1 = new Pet()
             {
                 Id = id++,
@@ -96,19 +96,9 @@ namespace Infrastructure.Data
                 PreviousOwner = "Hart",
                 Price = 549.99
             };
-
-            _pets.Add(pet1);
-            _pets.Add(pet2);
-            _pets.Add(pet3);
-            _pets.Add(pet4);
-            _pets.Add(pet5);
-            _pets.Add(pet6);
-            _pets.Add(pet7);
+            _pets = new List<Pet> { pet1, pet2, pet3, pet4, pet5, pet6, pet7 };
         }
 
-        public List<Pet> ReadPets()
-        {
-            return _pets;
-        }
+        
     }
 }

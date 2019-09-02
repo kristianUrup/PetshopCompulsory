@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Entity;
 using PetshopCompulsory.Core.DomainService;
+using System.Linq;
 
 namespace PetshopCompulsory.Core.ApplicationService.Impl
 {
@@ -38,28 +39,17 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
 
         public Pet GetPet(int id)
         {
-            foreach (Pet pet in _petRepo.ReadPets())
-            {
-                if(pet.Id == id)
-                {
-                    return pet;
-                }
-            }
-            return null;
+            return _petRepo.ReadById(id);
         }
 
-        public Pet Update(Pet petUpdate)
+        public Pet Update(Pet updatePet, Pet updatedPet)
         {
-            var pet = GetPet(petUpdate.Id);
-            pet.Name = petUpdate.Name;
-            pet.Price = petUpdate.Price;
-            pet.PreviousOwner = petUpdate.PreviousOwner;
-            return pet;
+            return _petRepo.Update(updatePet, updatedPet);
         }
 
         public List<Pet> GetPets()
         {
-            return _petRepo.ReadPets();
+            return _petRepo.ReadPets().ToList();
         }
 
         public Pet Delete(int id)
@@ -67,6 +57,29 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
            return _petRepo.Delete(id);
         }
 
-        
+        public List<Pet> FiveCheapestPets( )
+        {
+            List<Pet> sortedList = new List<Pet>();
+            IEnumerable<Pet> pets = _petRepo.ReadPets().OrderBy(pet => pet.Price);
+            List<Pet> petsordered = pets.ToList();
+            foreach (var pet in petsordered)
+            {
+                if(sortedList.Count == 5)
+                {
+                    break;
+                }
+                else
+                {
+                    sortedList.Add(pet);
+                }
+            }
+            return sortedList;
+        }
+
+        public List<Pet> OrderByPrice()
+        {
+            IEnumerable<Pet> pets = _petRepo.ReadPets().OrderBy(pet => pet.Price);
+            return pets.ToList();
+        }
     }
 }

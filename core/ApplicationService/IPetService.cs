@@ -13,7 +13,9 @@ namespace PetshopCompulsory.Core.ApplicationService
         Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, string previousOwner, double price);
 
         Pet Create(Pet pet);
-        Pet Update(Pet petUpdate);
+        Pet Update(Pet updatePet, Pet updatedPet);
         Pet Delete(int id);
+        List<Pet> FiveCheapestPets();
+        List<Pet> OrderByPrice();
     }
 }

@@ -26,6 +26,7 @@ namespace PetshopCompulsory.ConsoleApp
                 "Add new Pet",
                 "Delete Pet",
                 "Edit Pet",
+                "Find the 5 cheapest pets",
                 "Exit"
             };
 
@@ -33,9 +34,16 @@ namespace PetshopCompulsory.ConsoleApp
             {
                 Console.WriteLine((i + 1) + ": " + menuItems[i]);
             }
-            Console.WriteLine("Choose what you want to do?: ");
+            int selection = int.Parse(WriteAndRead("Choose what you want to do?: "));
 
-            HandleChoice(Convert.ToInt32(Console.ReadLine()));
+            while ((selection > 7) || (selection < 0))
+            {
+                WriteLine("You need to make a choice betweenn 1-6");
+                Choices();
+            }
+            HandleChoice(selection);
+            
+            
         }
 
         private void PrintPets()
@@ -60,30 +68,56 @@ namespace PetshopCompulsory.ConsoleApp
                     DeletePet();
                     break;
                 case 4:
-                    //Edit Pet
+                    EditPet();
                     break;
                 case 5:
+                    //chepest pets
+                    break;
+                case 6:
                     Exit();
                     break;
             }
 
         }
 
-        private void Exit()
+        private void FiveCheapestPets()
         {
+            Console.Clear();
+            WriteLine("This is the 5 cheapest pets:");
+            foreach (var pet in petService.FiveCheapestPets())
+            {
+                Console.WriteLine("Name: {0}, Price: {1}, Type: {2} ", pet.Name, pet.Price, pet.Type);
+            }
             
         }
-
         private void EditPet()
         {
+            Console.Clear();
             PrintPets();
             int id = int.Parse(WriteAndRead("Which pet do you want to edit?\nType the id: "));
             Pet pet = petService.GetPet(id);
             Console.WriteLine("You want to change {0} the {1} ", pet.Name, pet.Type);
-            int answer = int.Parse(WriteAndRead("\n1:Yes\n2:No"));
+            int answer = int.Parse(WriteAndRead("\n1:Yes\n2:No\n"));
 
+            if(answer == 1)
+            {
+                UpdatePet(pet);
+            }
         }
 
+        private void UpdatePet(Pet pet)
+        {
+            pet.Name = WriteAndRead("New name: ");
+            pet.Price = double.Parse(WriteAndRead("New price: "));
+            pet.PreviousOwner = WriteAndRead("New previous owner: ");
+            petService.Update(pet);
+            Console.Clear();
+            Choices();
+        }
+        private void Exit()
+        {
+            System.Environment.Exit(1);
+        }
 
         private void DeletePet()
         {
