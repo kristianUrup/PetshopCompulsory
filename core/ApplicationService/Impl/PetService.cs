@@ -4,6 +4,8 @@ using System.Text;
 using Core.Entity;
 using PetshopCompulsory.Core.DomainService;
 using System.Linq;
+using System.IO;
+using PetshopCompulsory.Core.Entity;
 
 namespace PetshopCompulsory.Core.ApplicationService.Impl
 {
@@ -16,7 +18,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             _petRepo = petRepo;
         }
 
-        public Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, string previousOwner, double price)
+        public Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, Owner previousOwner, double price)
         {
             var pet = new Pet()
             {
@@ -25,7 +27,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
                 Birthdate = birthDate,
                 SoldDate = soldDate,
                 Color = color,
-                PreviousOwner = previousOwner,
+                PreviousOwners = previousOwner,
                 Price = price
             };
             return pet;
@@ -33,6 +35,10 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
 
         public Pet Create(Pet pet)
         {
+            if(string.IsNullOrEmpty(pet.Name))
+            {
+                throw new InvalidDataException("Pet Needs a Name");
+            }
             return _petRepo.Create(pet);
         }
 
@@ -42,9 +48,18 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             return _petRepo.ReadById(id);
         }
 
-        public Pet Update(Pet updatePet, Pet updatedPet)
+        public Pet Update(int id, Pet updatedPet)
         {
-            return _petRepo.Update(updatePet, updatedPet);
+            if(id != updatedPet.Id)
+            {
+                throw new InvalidDataException("The id is not right");
+            }
+            else
+            {
+                Pet updatePet = GetPet(id);
+                return _petRepo.Update(updatePet, updatedPet);
+            }
+
         }
 
         public List<Pet> GetPets()

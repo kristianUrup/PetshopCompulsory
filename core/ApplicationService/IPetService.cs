@@ -1,4 +1,5 @@
 ﻿using Core.Entity;
+using PetshopCompulsory.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,10 +11,10 @@ namespace PetshopCompulsory.Core.ApplicationService
         List<Pet> GetPets();
 
         Pet GetPet(int id);
-        Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, string previousOwner, double price);
+        Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, Owner previousOwner, double price);
 
         Pet Create(Pet pet);
-        Pet Update(Pet updatePet, Pet updatedPet);
+        Pet Update(int id, Pet updatedPet);
         Pet Delete(int id);
         List<Pet> FiveCheapestPets();
         List<Pet> OrderByPrice();

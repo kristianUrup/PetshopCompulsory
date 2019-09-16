@@ -156,7 +156,7 @@ namespace PetshopCompulsory.ConsoleApp
                     PreviousOwner = previousOwner
 
                 };
-                petService.Update(updatePet, updatedPet);
+                petService.Update(id, updatedPet);
             }
         }
         public void Exit()

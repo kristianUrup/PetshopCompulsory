@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PetshopCompulsory.Core.Entity;
+using System;
+using System.Collections.Generic;
 
 namespace Core.Entity
 {
@@ -10,7 +12,7 @@ namespace Core.Entity
         public DateTime Birthdate { get; set; }
         public DateTime SoldDate { get; set; }
         public string Color { get; set; }
-        public string PreviousOwner { get; set; }
+        public Owner PreviousOwners { get; set; }
         public double Price { get; set; }
     }
 }
