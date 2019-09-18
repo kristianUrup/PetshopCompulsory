@@ -13,7 +13,7 @@ namespace PetshopCompulsory.Core.DomainService
 
         Pet ReadById(int id);
 
-        Pet Update(Pet petToUpdate, Pet updatedPet);
+        Pet Update(Pet petToUpdate);
 
         Pet Delete(int id);
 

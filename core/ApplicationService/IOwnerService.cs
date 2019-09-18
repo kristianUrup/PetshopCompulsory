@@ -10,7 +10,7 @@ namespace PetshopCompulsory.Core.ApplicationService
         Owner Create(Owner owner);
         List<Owner> ReadAllOwners();
         Owner ReadOwnerById(int id);
-        Owner Update(int id, Owner updatedOwner);
+        Owner Update(int id,Owner updatedOwner);
         Owner Delete(int id);
         List<Owner> SearchByName(string nameToSearch);
     }

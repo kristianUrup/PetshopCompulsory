@@ -34,12 +34,16 @@ namespace Petshop.Infrastructure.Data
             return _context.Pets.FirstOrDefault(pet => pet.Id == id);
         }
 
-        public Pet Update(Pet petToUpdate, Pet petUpdated)
+        public Pet Update(Pet petToUpdate)
         {
-            throw new NotImplementedException();
+            var petFromDB = ReadById(petToUpdate.Id);
+            if (petFromDB == null) return null;
+
+            petFromDB.Name = petToUpdate.Name;
+            petFromDB.Price = petToUpdate.Price;
+            petFromDB.PreviousOwners = petFromDB.PreviousOwners;
+            return petFromDB;
         }
-
-
 
         public IEnumerable<Pet> SearchPets(string petSearch)
         {

@@ -10,7 +10,7 @@ namespace PetshopCompulsory.Core.DomainService
         Owner Create(Owner owner);
         Owner ReadById(int id);
         IEnumerable<Owner> ReadAllOwners();
-        Owner Update(Owner ownerToUpdate, Owner updatedOwner);
+        Owner Update(Owner ownerToUpdate);
         Owner Delete(int id);
         IEnumerable<Owner> searchByName(string searchByName);
     }

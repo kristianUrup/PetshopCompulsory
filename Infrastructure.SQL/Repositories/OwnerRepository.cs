@@ -32,9 +32,17 @@ namespace Petshop.Infrastructure.Data
             return _context.Owners.FirstOrDefault(owner => owner.Id == id);
         }
 
-        public Owner Update(Owner ownerToUpdate, Owner updatedOwner)
+        public Owner Update(Owner ownerToUpdate)
         {
-            throw new NotImplementedException();
+            var ownerFromDB = ReadById(ownerToUpdate.Id);
+            if (ownerFromDB == null) return null;
+
+            ownerFromDB.Firstname = ownerToUpdate.Firstname;
+            ownerFromDB.Lastname = ownerToUpdate.Lastname;
+            ownerFromDB.PhoneNumber = ownerToUpdate.PhoneNumber;
+            ownerFromDB.Address = ownerToUpdate.Address;
+            ownerFromDB.Email = ownerToUpdate.Email;
+            return ownerFromDB;
         }
         public Owner Delete(int id)
         {

@@ -57,7 +57,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             else
             {
                 Pet updatePet = GetPet(id);
-                return _petRepo.Update(updatePet, updatedPet);
+                return _petRepo.Update(updatePet);
             }
 
         }

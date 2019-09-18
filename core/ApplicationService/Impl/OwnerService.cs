@@ -4,6 +4,7 @@ using System.Text;
 using PetshopCompulsory.Core.DomainService;
 using PetshopCompulsory.Core.Entity;
 using System.Linq;
+using System.IO;
 
 namespace PetshopCompulsory.Core.ApplicationService.Impl
 {
@@ -22,7 +23,16 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
 
         public List<Owner> ReadAllOwners()
         {
-            return _ownerRepo.ReadAllOwners().ToList();
+            List<Owner> owners = _ownerRepo.ReadAllOwners().ToList();
+            if (owners == null)
+            {
+                throw new InvalidDataException("There is no pets");
+            }
+            else
+            {
+                return owners;
+            }
+
         }
 
         public Owner ReadOwnerById(int id)
@@ -33,17 +43,42 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
 
         public Owner Update(int id, Owner updatedOwner)
         {
-            throw new NotImplementedException();
+            if (id != updatedOwner.Id)
+            {
+                throw new InvalidDataException("The id is not right");
+            }
+            else
+            {
+                Owner updateOwner = ReadOwnerById(id);
+                return _ownerRepo.Update(updateOwner);
+            }
         }
 
         public Owner Delete(int id)
         {
-            return _ownerRepo.Delete(id);
+            var ownerToDelete = ReadOwnerById(id);
+            if(ownerToDelete == null)
+            {
+                throw new InvalidDataException("The id is not right");
+            }
+            else
+            {
+                _ownerRepo.Delete(ownerToDelete.Id);
+                return ownerToDelete;
+            }
         }
 
         public List<Owner> SearchByName(string nameToSearch)
         {
-            return _ownerRepo.searchByName(nameToSearch).ToList();
+            List<Owner> searchedByOwners = _ownerRepo.searchByName(nameToSearch).ToList();
+            if(searchedByOwners == null)
+            {
+                throw new InvalidDataException("There is no owners by this name");
+            }
+            else
+            {
+                return searchedByOwners;
+            }
         }
 
     }

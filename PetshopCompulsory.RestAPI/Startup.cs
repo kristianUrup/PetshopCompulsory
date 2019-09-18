@@ -9,15 +9,16 @@ using PetshopCompulsory.Core.ApplicationService;
 using PetshopCompulsory.Core.ApplicationService.Impl;
 using PetshopCompulsory.Core.DomainService;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace PetshopCompulsory.RestAPI
 {
     public class Startup
     {
-        PetShopContext _context;
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        IDbInitializer _db;
+        public Startup(IConfiguration configuration)
         {
-            HostingEnvironment = env;
+            _db = new DbInitializer();
             Configuration = configuration;
         }
 
@@ -26,6 +27,8 @@ namespace PetshopCompulsory.RestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            // services.AddScoped<I, PetRepository>();
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IPetService, PetService>();
 
@@ -35,6 +38,11 @@ namespace PetshopCompulsory.RestAPI
 
             services.AddDbContext<PetShopContext>(opt => opt.UseSqlite("Data Source=PetShop.db"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.MaxDepth = 2;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,10 +53,10 @@ namespace PetshopCompulsory.RestAPI
                 // FakeDB.InitDataPet();
                 using (var scope = app.ApplicationServices.CreateScope())
                 {
-                    var ctx = scope.ServiceProvider.GetService<PetShopContext>();
+                    var ctx = scope.ServiceProvider.GetRequiredService<PetShopContext>();
+                    ctx.Database.EnsureDeleted();
                     ctx.Database.EnsureCreated();
-                    if()
-                    //DBInitializer.SeedDB(ctx);
+                    _db.SeedDb(ctx);
                 }
                 app.UseDeveloperExceptionPage();
 

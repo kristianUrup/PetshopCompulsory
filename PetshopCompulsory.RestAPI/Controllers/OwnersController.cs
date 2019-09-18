@@ -18,14 +18,16 @@ namespace PetshopCompulsory.RestAPI.Controllers
         {
             ownerService = ownerservice;
         }
-        public void Post([FromBody] Owner owner)
-        {
-            ownerService.Create(owner);
-        }
+        [HttpGet]
         public ActionResult<List<Owner>> Get()
         {
             return ownerService.ReadAllOwners();
         }
+        public ActionResult<Owner> Post([FromBody] Owner owner)
+        {
+            return ownerService.Create(owner);
+        }
+        
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Owner owner)
         {
