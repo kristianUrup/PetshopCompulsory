@@ -72,9 +72,9 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
            return _petRepo.Delete(id);
         }
 
-        public List<Pet> FiveCheapestPets( )
+        public List<Pet> FiveCheapestPets(int amount)
         {
-            return _petRepo.FiveCheapestPets().ToList();
+            return _petRepo.FiveCheapestPets(amount).ToList();
         }
 
         public List<Pet> OrderByPrice()

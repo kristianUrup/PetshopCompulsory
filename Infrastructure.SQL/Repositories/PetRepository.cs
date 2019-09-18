@@ -62,9 +62,9 @@ namespace Petshop.Infrastructure.Data
             //return petToDelete;
         }
 
-        public IEnumerable<Pet> FiveCheapestPets()
+        public IEnumerable<Pet> FiveCheapestPets(int amount)
         {
-            IEnumerable<Pet> orderedList = _context.Pets.OrderBy(p => p.Price).Take(2);
+            IEnumerable<Pet> orderedList = _context.Pets.OrderBy(p => p.Price).Take(amount);
             return orderedList;
         }
     }

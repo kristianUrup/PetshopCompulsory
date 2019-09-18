@@ -20,11 +20,25 @@ namespace PetshopCompulsory.RestAPI.Controllers
             _petService = petService;
         }
 
-        // GET api/values
+        // GET api/pets?searchType=x&value=y
         [HttpGet]
         public ActionResult<List<Pet>> Get()
         {
-            return _petService.FiveCheapestPets();
+            return _petService.GetPets();
+            //switch (searchType)
+            //{
+            //    case "cheapestPets":
+            //        return _petService.FiveCheapestPets(Convert.ToInt32(value));
+            //        break;
+            //    case "TypeSearch":
+            //        return _petService.SearchForType(value);
+            //        break;
+            //    default:
+            //        return null;
+            //    break;
+            //}
+
+            
         }
 
         // GET api/values/5

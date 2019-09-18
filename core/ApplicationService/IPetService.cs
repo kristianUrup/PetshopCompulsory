@@ -16,7 +16,7 @@ namespace PetshopCompulsory.Core.ApplicationService
         Pet Create(Pet pet);
         Pet Update(int id, Pet updatedPet);
         Pet Delete(int id);
-        List<Pet> FiveCheapestPets();
+        List<Pet> FiveCheapestPets(int amount);
         List<Pet> OrderByPrice();
         List<Pet> SearchForType(string type);
     }
