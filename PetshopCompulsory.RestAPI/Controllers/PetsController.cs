@@ -24,7 +24,7 @@ namespace PetshopCompulsory.RestAPI.Controllers
         [HttpGet]
         public ActionResult<List<Pet>> Get()
         {
-            return _petService.GetPets();
+            return _petService.FiveCheapestPets();
         }
 
         // GET api/values/5

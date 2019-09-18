@@ -41,7 +41,7 @@ namespace Petshop.Infrastructure.Data
 
             petFromDB.Name = petToUpdate.Name;
             petFromDB.Price = petToUpdate.Price;
-            petFromDB.PreviousOwners = petFromDB.PreviousOwners;
+            petFromDB.Owners = petFromDB.Owners;
             return petFromDB;
         }
 
@@ -60,6 +60,12 @@ namespace Petshop.Infrastructure.Data
             //var petToDelete = _context.Pets.Remove(ReadById(id)).Entity;
             //_context.SaveChanges();
             //return petToDelete;
+        }
+
+        public IEnumerable<Pet> FiveCheapestPets()
+        {
+            IEnumerable<Pet> orderedList = _context.Pets.OrderBy(p => p.Price).Take(2);
+            return orderedList;
         }
     }
 }

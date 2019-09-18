@@ -18,5 +18,6 @@ namespace PetshopCompulsory.Core.DomainService
         Pet Delete(int id);
 
         IEnumerable<Pet> SearchPets(string petSearch);
+        IEnumerable<Pet> FiveCheapestPets();
     }
 }

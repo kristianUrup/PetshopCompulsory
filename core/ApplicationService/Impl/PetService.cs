@@ -18,7 +18,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             _petRepo = petRepo;
         }
 
-        public Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, Owner previousOwner, double price)
+        public Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, List<PetOwner> owners, double price)
         {
             var pet = new Pet()
             {
@@ -27,7 +27,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
                 Birthdate = birthDate,
                 SoldDate = soldDate,
                 Color = color,
-                PreviousOwners = previousOwner,
+                Owners = owners,
                 Price = price
             };
             return pet;
@@ -74,21 +74,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
 
         public List<Pet> FiveCheapestPets( )
         {
-            List<Pet> sortedList = new List<Pet>();
-            IEnumerable<Pet> pets = _petRepo.ReadPets().OrderBy(pet => pet.Price);
-            List<Pet> petsordered = pets.ToList();
-            foreach (var pet in petsordered)
-            {
-                if(sortedList.Count == 5)
-                {
-                    break;
-                }
-                else
-                {
-                    sortedList.Add(pet);
-                }
-            }
-            return sortedList;
+            return _petRepo.FiveCheapestPets().ToList();
         }
 
         public List<Pet> OrderByPrice()

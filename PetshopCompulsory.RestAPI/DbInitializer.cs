@@ -54,6 +54,7 @@ namespace PetshopCompulsory.RestAPI
             {
                 Name = "Mingo",
                 Type = "Dog",
+                Price = 500.0,
                 Birthdate = Convert.ToDateTime("13 Juni 2013"),
                 SoldDate = Convert.ToDateTime("15 juni 2013"),
                 Color = "Red"
@@ -63,9 +64,21 @@ namespace PetshopCompulsory.RestAPI
             {
                 Name = "Dingo",
                 Type = "Cat",
+                Price = 50.0,
                 Birthdate = Convert.ToDateTime("01 Juni 2013"),
                 SoldDate = Convert.ToDateTime("12 juni 2013"),
                 Color = "Blue"
+            });
+
+            var pet3 = ctx.Pets.Add(new Pet()
+            {
+                Name = "Suko",
+                Type = "Goat",
+                Price = 5.0,
+                Birthdate = Convert.ToDateTime("01 Juni 2013"),
+                SoldDate = Convert.ToDateTime("12 August 2013"),
+                Color = "Yellow"
+
             });
         }
     }
