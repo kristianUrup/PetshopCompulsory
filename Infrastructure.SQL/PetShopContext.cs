@@ -16,25 +16,18 @@ namespace Petshop.Infrastructure.SQL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PetOwner>().HasKey(po => new
-            {
-                po.OId,
-                po.PId
-            });
+            modelBuilder.Entity<Pet>()
+                .HasMany(pet => pet.Owners)
+                .WithOne(po => po.Pet)
+                .HasForeignKey(petOwner => petOwner.PetId);
 
-            modelBuilder.Entity<PetOwner>()
-                .HasOne<Pet>(petOwner => petOwner.Pet)
-                .WithMany(pet => pet.Owners)
-                .HasForeignKey(petOwner => petOwner.PId);
-
-            modelBuilder.Entity<PetOwner>()
-                .HasOne<Owner>(petOwner => petOwner.Owner)
-                .WithMany(owner => owner.Pets)
-                .HasForeignKey(petOwner => petOwner.OId);
+            modelBuilder.Entity<Owner>()
+                .HasMany(owner => owner.Pets)
+                .WithOne(petOwner => petOwner.Owner)
+                .HasForeignKey(petOwner => petOwner.OwnerId);
         }
 
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Owner> Owners { get; set; }
-        public DbSet<PetOwner> PetOwners { get; set; }
     }
 }

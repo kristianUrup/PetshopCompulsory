@@ -41,7 +41,7 @@ namespace PetshopCompulsory.RestAPI
 
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.MaxDepth = 2;
+                options.SerializerSettings.MaxDepth = 1;
             });
         }
 
