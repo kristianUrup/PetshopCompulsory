@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Entity;
-using Microsoft.AspNetCore.Http;
+﻿using Core.Entity;
 using Microsoft.AspNetCore.Mvc;
 using PetshopCompulsory.Core.ApplicationService;
+using PetshopCompulsory.Core.DomainService.Filtering;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PetshopCompulsory.RestAPI.Controllers
 {
@@ -22,9 +21,17 @@ namespace PetshopCompulsory.RestAPI.Controllers
 
         // GET api/pets?searchType=x&value=y
         [HttpGet]
-        public ActionResult<List<Pet>> Get()
+        public ActionResult<IEnumerable<Pet>> Get([FromQuery] Filter filter)
         {
-            return _petService.GetPets();
+            try
+            {
+                return Ok(_petService.GetPets(filter));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
             //switch (searchType)
             //{
             //    case "cheapestPets":
@@ -38,7 +45,7 @@ namespace PetshopCompulsory.RestAPI.Controllers
             //    break;
             //}
 
-            
+
         }
 
         // GET api/values/5
@@ -70,13 +77,14 @@ namespace PetshopCompulsory.RestAPI.Controllers
         {
             try
             {
-                return Ok( _petService.Create(pet));
-            } catch(Exception e)
+                return Ok(_petService.Create(pet));
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            
-            
+
+
         }
 
         [HttpPut("{id}")]
@@ -85,18 +93,19 @@ namespace PetshopCompulsory.RestAPI.Controllers
             try
             {
                 return Ok(_petService.Update(id, updatedPet));
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-            
+
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
             Pet petToDelete = _petService.GetPet(id);
-            if(petToDelete != null)
+            if (petToDelete != null)
             {
                 _petService.Delete(id);
             }

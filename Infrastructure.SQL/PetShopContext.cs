@@ -22,6 +22,8 @@ namespace Petshop.Infrastructure.SQL
                 po.PId
             });
 
+            
+
             modelBuilder.Entity<PetOwner>()
                 .HasOne<Pet>(petOwner => petOwner.Pet)
                 .WithMany(pet => pet.Owners)
@@ -31,10 +33,28 @@ namespace Petshop.Infrastructure.SQL
                 .HasOne<Owner>(petOwner => petOwner.Owner)
                 .WithMany(owner => owner.Pets)
                 .HasForeignKey(petOwner => petOwner.OId);
+
+
+            modelBuilder.Entity<PetColor>().HasKey(pc => new
+            {
+                pc.ColorId,
+                pc.PetId
+            });
+
+            modelBuilder.Entity<PetColor>()
+                .HasOne<Pet>(petColor => petColor.Pet)
+                .WithMany(pet => pet.Colors)
+                .HasForeignKey(petColor => petColor.PetId);
+
+            modelBuilder.Entity<PetColor>()
+                .HasOne<Color>(petColor => petColor.Color)
+                .WithMany(color => color.Pets)
+                .HasForeignKey(petColor => petColor.ColorId);
         }
 
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Owner> Owners { get; set; }
         public DbSet<PetOwner> PetOwners { get; set; }
+        public DbSet<Color> Colors { get; set; }
     }
 }

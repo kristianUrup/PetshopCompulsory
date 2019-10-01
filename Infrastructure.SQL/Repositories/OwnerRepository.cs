@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Petshop.Infrastructure.SQL;
 using PetshopCompulsory.Core.DomainService;
+using PetshopCompulsory.Core.DomainService.Filtering;
 using PetshopCompulsory.Core.Entity;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,34 @@ namespace Petshop.Infrastructure.Data
             return owner;
         }
 
-        public IEnumerable<Owner> ReadAllOwners()
+        public FilteredList<Owner> ReadAllOwners(Filter filter)
         {
-            return _context.Owners.ToList();
+            if(filter == null)
+            {
+                return new FilteredList<Owner>() {List = _context.Owners.ToList(), Count = _context.Owners.Count() };
+            }
+
+            var items = _context.Owners
+                .Include(o => o.Pets)
+                .ThenInclude(po => po.Pet)
+                .Skip((filter.CurrentPage - 1) * filter.ItemsPrPage)
+                .Take(filter.ItemsPrPage)
+                .ToList();
+
+            return new FilteredList<Owner>() { List = items, Count = _context.Owners.Count() };
+            
+            //return _context.Owners
+            //    .Include(o=> o.Pets)
+            //    .ThenInclude(po=> po.Pet)
+            //    .ToList();
         }
 
         public Owner ReadById(int id)
         {
-            return _context.Owners.FirstOrDefault(owner => owner.Id == id);
+            return _context.Owners
+                .Include(o => o.Pets)
+                .ThenInclude(po => po.Pet)
+                .FirstOrDefault(owner => owner.Id == id);
         }
 
         public Owner Update(Owner ownerToUpdate)

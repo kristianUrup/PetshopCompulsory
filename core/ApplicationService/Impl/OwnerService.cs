@@ -5,6 +5,7 @@ using PetshopCompulsory.Core.DomainService;
 using PetshopCompulsory.Core.Entity;
 using System.Linq;
 using System.IO;
+using PetshopCompulsory.Core.DomainService.Filtering;
 
 namespace PetshopCompulsory.Core.ApplicationService.Impl
 {
@@ -21,9 +22,9 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             return _ownerRepo.Create(owner);
         }
 
-        public List<Owner> ReadAllOwners()
+        public FilteredList<Owner> ReadAllOwners(Filter filter)
         {
-            List<Owner> owners = _ownerRepo.ReadAllOwners().ToList();
+            FilteredList<Owner> owners = _ownerRepo.ReadAllOwners(filter);
             if (owners == null)
             {
                 throw new InvalidDataException("There is no pets");

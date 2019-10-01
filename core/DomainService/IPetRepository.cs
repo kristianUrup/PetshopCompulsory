@@ -1,4 +1,5 @@
 ﻿using Core.Entity;
+using PetshopCompulsory.Core.DomainService.Filtering;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,7 +8,7 @@ namespace PetshopCompulsory.Core.DomainService
 {
     public interface IPetRepository
     {
-        IEnumerable<Pet> ReadPets();
+        FilteredList<Pet> ReadPets(Filter filter);
 
         Pet Create(Pet pet);
 

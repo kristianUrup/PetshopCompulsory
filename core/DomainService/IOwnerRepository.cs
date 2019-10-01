@@ -1,4 +1,5 @@
-﻿using PetshopCompulsory.Core.Entity;
+﻿using PetshopCompulsory.Core.DomainService.Filtering;
+using PetshopCompulsory.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +10,7 @@ namespace PetshopCompulsory.Core.DomainService
     {
         Owner Create(Owner owner);
         Owner ReadById(int id);
-        IEnumerable<Owner> ReadAllOwners();
+        FilteredList<Owner> ReadAllOwners(Filter filter);
         Owner Update(Owner ownerToUpdate);
         Owner Delete(int id);
         IEnumerable<Owner> searchByName(string searchByName);

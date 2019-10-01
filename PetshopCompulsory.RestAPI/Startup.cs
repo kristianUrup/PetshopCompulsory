@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Petshop.Infrastructure.Data;
 using Petshop.Infrastructure.SQL;
 using PetshopCompulsory.Core.ApplicationService;
 using PetshopCompulsory.Core.ApplicationService.Impl;
 using PetshopCompulsory.Core.DomainService;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace PetshopCompulsory.RestAPI
 {
@@ -39,7 +39,8 @@ namespace PetshopCompulsory.RestAPI
             services.AddDbContext<PetShopContext>(opt => opt.UseSqlite("Data Source=PetShop.db"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddMvc().AddJsonOptions(options => {
+            services.AddMvc().AddJsonOptions(options =>
+            {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.MaxDepth = 2;
             });

@@ -6,6 +6,7 @@ using System.Text;
 using System.Linq;
 using Petshop.Infrastructure.SQL;
 using Microsoft.EntityFrameworkCore;
+using PetshopCompulsory.Core.DomainService.Filtering;
 
 namespace Petshop.Infrastructure.Data
 {
@@ -25,13 +26,32 @@ namespace Petshop.Infrastructure.Data
             //_context.SaveChanges();
             //return petToCreate;
         }
-        public IEnumerable<Pet> ReadPets()
+        public FilteredList<Pet> ReadPets(Filter filter)
         {
-            return _context.Pets.ToList();
+            if (filter == null)
+            {
+                return new FilteredList<Pet>(){ List = _context.Pets.ToList(), Count = _context.Pets.Count()};
+            }
+
+            var items = _context.Pets
+                .Include(p => p.Owners)
+                .ThenInclude(po => po.Owner)
+                .Include(p => p.Colors)
+                .ThenInclude(pc => pc.Color)
+                .Skip((filter.CurrentPage - 1) * filter.ItemsPrPage)
+                .Take(filter.ItemsPrPage)
+                .ToList();
+
+            return new FilteredList<Pet>() { List = items, Count = _context.Pets.Count() };
         }
         public Pet ReadById(int id)
         {
-            return _context.Pets.FirstOrDefault(pet => pet.Id == id);
+            return _context.Pets
+                .Include(p => p.Owners)
+                .ThenInclude(po => po.Owner)
+                .Include(p => p.Colors)
+                .ThenInclude(pc => pc.Color)
+                .FirstOrDefault(pet => pet.Id == id);
         }
 
         public Pet Update(Pet petToUpdate)

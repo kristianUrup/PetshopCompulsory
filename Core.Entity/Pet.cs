@@ -11,8 +11,9 @@ namespace Core.Entity
         public string Type { get; set; }
         public DateTime Birthdate { get; set; }
         public DateTime SoldDate { get; set; }
-        public string Color { get; set; }
-        public List<PetOwner> Owners { get; set; }
+        public List<PetColor> Colors { get; set; }
         public double Price { get; set; }
+        public List<PetOwner> Owners { get; set; }
+
     }
 }

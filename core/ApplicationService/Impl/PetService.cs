@@ -6,6 +6,7 @@ using PetshopCompulsory.Core.DomainService;
 using System.Linq;
 using System.IO;
 using PetshopCompulsory.Core.Entity;
+using PetshopCompulsory.Core.DomainService.Filtering;
 
 namespace PetshopCompulsory.Core.ApplicationService.Impl
 {
@@ -18,7 +19,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             _petRepo = petRepo;
         }
 
-        public Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, string color, List<PetOwner> owners, double price)
+        public Pet NewPet(string name, string type, DateTime birthDate, DateTime soldDate, List<PetColor> colors, List<PetOwner> owners, double price)
         {
             var pet = new Pet()
             {
@@ -26,7 +27,7 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
                 Type = type,
                 Birthdate = birthDate,
                 SoldDate = soldDate,
-                Color = color,
+                Colors = colors,
                 Owners = owners,
                 Price = price
             };
@@ -62,9 +63,9 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
 
         }
 
-        public List<Pet> GetPets()
+        public FilteredList<Pet> GetPets(Filter filter)
         {
-            return _petRepo.ReadPets().ToList();
+            return _petRepo.ReadPets(filter);
         }
 
         public Pet Delete(int id)
@@ -77,24 +78,14 @@ namespace PetshopCompulsory.Core.ApplicationService.Impl
             return _petRepo.FiveCheapestPets(amount).ToList();
         }
 
-        public List<Pet> OrderByPrice()
+        public FilteredList<Pet> OrderByPrice(Filter filter)
         {
-            IEnumerable<Pet> pets = _petRepo.ReadPets().OrderBy(pet => pet.Price);
-            return pets.ToList();
+            return _petRepo.ReadPets(filter);
         }
 
         public List<Pet> SearchForType(string type)
         {
-            string theType = type.ToLower();
-            List<Pet> searchedPets = new List<Pet>();
-            foreach (var pet in _petRepo.ReadPets().ToList())
-            {
-                if (pet.Type.ToLower().Equals(theType))
-                {
-                    searchedPets.Add(pet);
-                }
-            }
-            return searchedPets;
+            throw new NotImplementedException();
         }
     }
 }

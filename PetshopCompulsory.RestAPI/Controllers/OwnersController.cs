@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using PetshopCompulsory.Core.ApplicationService;
+using PetshopCompulsory.Core.DomainService.Filtering;
+using PetshopCompulsory.Core.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using PetshopCompulsory.Core.ApplicationService;
-using PetshopCompulsory.Core.Entity;
 
 namespace PetshopCompulsory.RestAPI.Controllers
 {
@@ -13,31 +12,38 @@ namespace PetshopCompulsory.RestAPI.Controllers
     [ApiController]
     public class OwnersController : ControllerBase
     {
-        IOwnerService ownerService;
+        IOwnerService _ownerService;
         public OwnersController(IOwnerService ownerservice)
         {
-            ownerService = ownerservice;
+            _ownerService = ownerservice;
         }
         [HttpGet]
-        public ActionResult<List<Owner>> Get()
+        public ActionResult<List<Owner>> Get(Filter filter)
         {
-            return ownerService.ReadAllOwners();
+            try
+            {
+                return Ok(_ownerService.ReadAllOwners(filter));
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         public ActionResult<Owner> Post([FromBody] Owner owner)
         {
-            return ownerService.Create(owner);
+            return _ownerService.Create(owner);
         }
-        
+
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Owner owner)
         {
-            ownerService.Update(id, owner);
+            _ownerService.Update(id, owner);
         }
 
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            ownerService.Delete(id);
+            _ownerService.Delete(id);
         }
 
     }
