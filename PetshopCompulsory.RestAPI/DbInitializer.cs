@@ -17,6 +17,7 @@ namespace PetshopCompulsory.RestAPI
 
         private void SeedOwners(PetShopContext ctx)
         {
+
             var owner1 = new Owner()
             {
                 Firstname = "John",
@@ -47,6 +48,7 @@ namespace PetshopCompulsory.RestAPI
                 Pets = new List<PetOwner>()
 
             };
+
             owner1 = ctx.Owners.Add(owner1).Entity;
             owner2 = ctx.Owners.Add(owner2).Entity;
             owner3 = ctx.Owners.Add(owner3).Entity;
@@ -59,6 +61,7 @@ namespace PetshopCompulsory.RestAPI
                 Birthdate = Convert.ToDateTime("13 Juni 2013"),
                 SoldDate = Convert.ToDateTime("15 juni 2013"),
                 Colors = new List<PetColor>(),
+
                 Owners = new List<PetOwner>()
             };
 
@@ -70,6 +73,7 @@ namespace PetshopCompulsory.RestAPI
                 Birthdate = Convert.ToDateTime("01 Juni 2013"),
                 SoldDate = Convert.ToDateTime("12 juni 2013"),
                 Colors = new List<PetColor>(),
+
                 Owners = new List<PetOwner>()
             };
 
@@ -98,6 +102,7 @@ namespace PetshopCompulsory.RestAPI
             {
                 Owner = owner3
             };
+
 
             pet1.Owners.Add(petOwner1);
             pet2.Owners.Add(petOwner2);

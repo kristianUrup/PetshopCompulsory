@@ -16,23 +16,22 @@ namespace Petshop.Infrastructure.SQL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PetOwner>().HasKey(po => new
-            {
-                po.OId,
-                po.PId
-            });
+            modelBuilder.Entity<Pet>()
+                .HasMany(pet => pet.Owners)
+                .WithOne(po => po.Pet)
+                .HasForeignKey(petOwner => petOwner.PetId);
 
             
 
             modelBuilder.Entity<PetOwner>()
                 .HasOne<Pet>(petOwner => petOwner.Pet)
                 .WithMany(pet => pet.Owners)
-                .HasForeignKey(petOwner => petOwner.PId);
+                .HasForeignKey(petOwner => petOwner.PetId);
 
             modelBuilder.Entity<PetOwner>()
                 .HasOne<Owner>(petOwner => petOwner.Owner)
                 .WithMany(owner => owner.Pets)
-                .HasForeignKey(petOwner => petOwner.OId);
+                .HasForeignKey(petOwner => petOwner.OwnerId);
 
 
             modelBuilder.Entity<PetColor>().HasKey(pc => new
@@ -50,6 +49,7 @@ namespace Petshop.Infrastructure.SQL
                 .HasOne<Color>(petColor => petColor.Color)
                 .WithMany(color => color.Pets)
                 .HasForeignKey(petColor => petColor.ColorId);
+
         }
 
         public DbSet<Pet> Pets { get; set; }
