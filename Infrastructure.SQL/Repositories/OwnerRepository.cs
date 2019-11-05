@@ -25,27 +25,32 @@ namespace Petshop.Infrastructure.Data
 
         public FilteredList<Owner> ReadAllOwners(Filter filter)
         {
-            if(filter == null)
+            var filteredList = new FilteredList<Owner>();
+            if (filter != null && filter.ItemsPrPage > 0 && filter.CurrentPage > 0)
             {
-                return new FilteredList<Owner>() {List = _context.Owners.ToList(), Count = _context.Owners.Count() };
+                var items = _context.Owners
+                    .Include(o => o.Pets)
+                    .ThenInclude(po => po.Pet)
+                    .ThenInclude(p => p.Colors)
+                    .ThenInclude(pc => pc.Color)
+                    .Skip((filter.CurrentPage - 1) * filter.ItemsPrPage)
+                    .Take(filter.ItemsPrPage)
+                    .ToList();
+
+
+                return new FilteredList<Owner>() {List = items, Count = _context.Owners.Count()};
             }
+            filteredList.List = _context.Owners;
+            filteredList.Count = _context.Owners.Count();
+            return filteredList;
+        }
 
-            var items = _context.Owners
-                .Include(o => o.Pets)
-                .ThenInclude(po => po.Pet)
-                .Skip((filter.CurrentPage - 1) * filter.ItemsPrPage)
-                .Take(filter.ItemsPrPage)
-                .ToList();
-
-            return new FilteredList<Owner>() { List = items, Count = _context.Owners.Count() };
-            
-            //return _context.Owners
+        //return _context.Owners
             //    .Include(o=> o.Pets)
             //    .ThenInclude(po=> po.Pet)
             //    .ToList();
-        }
 
-        public Owner ReadById(int id)
+            public Owner ReadById(int id)
         {
             return _context.Owners
                 .Include(o => o.Pets)

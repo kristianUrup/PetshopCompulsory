@@ -1,13 +1,15 @@
-﻿using Core.Entity;
+﻿using PetshopCompulsory.Core.Entity;
 using Microsoft.AspNetCore.Mvc;
 using PetshopCompulsory.Core.ApplicationService;
 using PetshopCompulsory.Core.DomainService.Filtering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PetshopCompulsory.RestAPI.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class PetsController : ControllerBase
@@ -20,8 +22,9 @@ namespace PetshopCompulsory.RestAPI.Controllers
         }
 
         // GET api/pets?searchType=x&value=y
+        [Authorize]
         [HttpGet]
-        public ActionResult<IEnumerable<Pet>> Get([FromQuery] Filter filter)
+        public ActionResult<FilteredList<Pet>> Get([FromQuery] Filter filter)
         {
             try
             {
@@ -49,6 +52,7 @@ namespace PetshopCompulsory.RestAPI.Controllers
         }
 
         // GET api/values/5
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public ActionResult<Pet> Get(int id)
         {

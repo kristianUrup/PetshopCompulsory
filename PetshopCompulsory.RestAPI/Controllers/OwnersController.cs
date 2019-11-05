@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PetshopCompulsory.Core.ApplicationService;
 using PetshopCompulsory.Core.DomainService.Filtering;
 using PetshopCompulsory.Core.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PetshopCompulsory.RestAPI.Controllers
 {
@@ -17,18 +20,27 @@ namespace PetshopCompulsory.RestAPI.Controllers
         {
             _ownerService = ownerservice;
         }
+        [Authorize]
         [HttpGet]
-        public ActionResult<List<Owner>> Get(Filter filter)
+        public ActionResult<FilteredList<Owner>> Get(Filter filter)
         {
             try
             {
                 return Ok(_ownerService.ReadAllOwners(filter));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("{id}")]
+        public ActionResult<Owner> Get(int id)
+        {
+            return _ownerService.ReadOwnerById(id);
+        }
+
+        [HttpPost]
         public ActionResult<Owner> Post([FromBody] Owner owner)
         {
             return _ownerService.Create(owner);
@@ -45,6 +57,5 @@ namespace PetshopCompulsory.RestAPI.Controllers
         {
             _ownerService.Delete(id);
         }
-
     }
 }

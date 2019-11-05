@@ -1,4 +1,4 @@
-﻿using Core.Entity;
+﻿using PetshopCompulsory.Core.Entity;
 using PetshopCompulsory.Core.DomainService.Filtering;
 using System;
 using System.Collections.Generic;

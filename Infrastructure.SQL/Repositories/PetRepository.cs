@@ -1,4 +1,4 @@
-﻿using Core.Entity;
+﻿using PetshopCompulsory.Core.Entity;
 using PetshopCompulsory.Core.DomainService;
 using System;
 using System.Collections.Generic;
@@ -28,21 +28,23 @@ namespace Petshop.Infrastructure.Data
         }
         public FilteredList<Pet> ReadPets(Filter filter)
         {
-            if (filter == null)
+            var filteredList = new FilteredList<Pet>();
+            if (filter != null && filter.ItemsPrPage > 0 && filter.CurrentPage > 0)
             {
-                return new FilteredList<Pet>(){ List = _context.Pets.ToList(), Count = _context.Pets.Count()};
+                var items = _context.Pets
+                    .Include(p => p.Owners)
+                    .ThenInclude(po => po.Owner)
+                    .Include(p => p.Colors)
+                    .ThenInclude(pc => pc.Color)
+                    .Skip((filter.CurrentPage - 1) * filter.ItemsPrPage)
+                    .Take(filter.ItemsPrPage)
+                    .ToList();
+
+                return new FilteredList<Pet>() {List = items, Count = _context.Pets.Count()};
             }
-
-            var items = _context.Pets
-                .Include(p => p.Owners)
-                .ThenInclude(po => po.Owner)
-                .Include(p => p.Colors)
-                .ThenInclude(pc => pc.Color)
-                .Skip((filter.CurrentPage - 1) * filter.ItemsPrPage)
-                .Take(filter.ItemsPrPage)
-                .ToList();
-
-            return new FilteredList<Pet>() { List = items, Count = _context.Pets.Count() };
+            filteredList.List = _context.Pets;
+            filteredList.Count = _context.Pets.Count();
+            return filteredList;
         }
         public Pet ReadById(int id)
         {

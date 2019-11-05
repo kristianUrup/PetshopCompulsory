@@ -12,6 +12,11 @@ namespace Petshop.Infrastructure.SQL.Repositories
     public class ColorRepository : IColorRepository
     {
         PetShopContext _ctx;
+
+        public ColorRepository(PetShopContext ctx)
+        {
+            _ctx = ctx;
+        }
         public Color Create(Color color)
         {
             _ctx.Colors.Attach(color).State = EntityState.Added;

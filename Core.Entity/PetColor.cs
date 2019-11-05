@@ -1,4 +1,4 @@
-﻿using Core.Entity;
+﻿using PetshopCompulsory.Core.Entity;
 
 namespace PetshopCompulsory.Core.Entity
 {

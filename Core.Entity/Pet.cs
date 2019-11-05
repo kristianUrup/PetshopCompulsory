@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Core.Entity
+namespace PetshopCompulsory.Core.Entity
 {
     public class Pet
     {
