@@ -56,8 +56,8 @@ namespace PetshopCompulsory.RestAPI
                 Name = "Mingo",
                 Type = "Dog",
                 Price = 500.0,
-                Birthdate = Convert.ToDateTime("13 Juni 2013"),
-                SoldDate = Convert.ToDateTime("15 juni 2013"),
+                Birthdate = new DateTime(2013, 6, 13),
+                SoldDate = new DateTime(2013, 6, 15),
                 Colors = new List<PetColor>(),
                 Owners = new List<PetOwner>()
             };
@@ -67,8 +67,8 @@ namespace PetshopCompulsory.RestAPI
                 Name = "Dingo",
                 Type = "Cat",
                 Price = 50.0,
-                Birthdate = Convert.ToDateTime("01 Juni 2013"),
-                SoldDate = Convert.ToDateTime("12 juni 2013"),
+                Birthdate = new DateTime(2013, 6, 3),
+                SoldDate = new DateTime(2013, 6, 3),
                 Colors = new List<PetColor>(),
                 Owners = new List<PetOwner>()
             };
@@ -78,8 +78,8 @@ namespace PetshopCompulsory.RestAPI
                 Name = "Suko",
                 Type = "Goat",
                 Price = 5.0,
-                Birthdate = Convert.ToDateTime("01 Juni 2013"),
-                SoldDate = Convert.ToDateTime("12 August 2013"),
+                Birthdate = new DateTime(2013, 6, 1),
+                SoldDate = new DateTime(2013, 8, 1),
                 Colors = new List<PetColor>(),
                 Owners = new List<PetOwner>()
             };

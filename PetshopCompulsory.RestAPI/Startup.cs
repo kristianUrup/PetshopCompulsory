@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,13 +22,15 @@ namespace PetshopCompulsory.RestAPI
     public class Startup
     {
         IDbInitializer _db;
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             _db = new DbInitializer();
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -59,7 +62,19 @@ namespace PetshopCompulsory.RestAPI
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
 
-            services.AddDbContext<PetShopContext>(opt => opt.UseSqlite("Data Source=PetShop.db"));
+            if (Environment.IsDevelopment())
+            {
+                services.AddDbContext<PetShopContext>(
+                    opt => opt.UseSqlite(
+                        "Data Source=PetShop.db"));
+            }
+            else
+            {
+                services.AddDbContext<PetShopContext>(
+                    opt => opt.UseSqlServer(Configuration.GetConnectionString(
+                    "defaultConnection")));
+            }
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddMvc().AddJsonOptions(options =>
@@ -87,10 +102,19 @@ namespace PetshopCompulsory.RestAPI
             }
             else
             {
+                using (var scope = app.ApplicationServices.CreateScope())
+                {
+                    var ctx = scope.ServiceProvider.GetRequiredService<PetShopContext>();
+                    ctx.Database.EnsureCreated();
+                    if (ctx.Pets.Any())
+                    {
+                        _db.SeedDb(ctx);
+                    }
+                }
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseMvc();

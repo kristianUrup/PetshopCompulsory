@@ -22,7 +22,7 @@ namespace PetshopCompulsory.RestAPI.Controllers
         }
         [Authorize]
         [HttpGet]
-        public ActionResult<FilteredList<Owner>> Get(Filter filter)
+        public ActionResult<FilteredList<Owner>> Get([FromQuery] Filter filter)
         {
             try
             {

@@ -42,7 +42,11 @@ namespace Petshop.Infrastructure.Data
 
                 return new FilteredList<Pet>() {List = items, Count = _context.Pets.Count()};
             }
-            filteredList.List = _context.Pets;
+            filteredList.List = _context.Pets
+                .Include(p => p.Owners)
+                .ThenInclude(po => po.Owner)
+                .Include(p => p.Colors)
+                .ThenInclude(pc => pc.Color);
             filteredList.Count = _context.Pets.Count();
             return filteredList;
         }
