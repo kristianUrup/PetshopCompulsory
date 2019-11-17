@@ -22,7 +22,7 @@ namespace PetshopCompulsory.RestAPI.Controllers
         }
 
         // GET api/pets?searchType=x&value=y
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public ActionResult<FilteredList<Pet>> Get([FromQuery] Filter filter)
         {
@@ -52,7 +52,7 @@ namespace PetshopCompulsory.RestAPI.Controllers
         }
 
         // GET api/values/5
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
         public ActionResult<Pet> Get(int id)
         {
@@ -76,7 +76,7 @@ namespace PetshopCompulsory.RestAPI.Controllers
         //}
 
         // POST api/values
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         public ActionResult<Pet> Post([FromBody] Pet pet)
         {
